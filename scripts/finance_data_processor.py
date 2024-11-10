@@ -140,7 +140,7 @@ class FinanceDataProcessor:
 
         for i, col in enumerate(outlier_cols):
             ax = axes[i]
-            ax.plot(data.index, data[col], label=col, color="skyblue")
+            ax.plot(data.index, data[col], label=col, color="blue")
             ax.scatter(data.index[outliers[col]], data[col][outliers[col]], color='red', s=20, label="Outliers")
             ax.set_title(f"{col} - Time Series with Outliers of {ticker}")
             ax.set_xlabel("Date")
