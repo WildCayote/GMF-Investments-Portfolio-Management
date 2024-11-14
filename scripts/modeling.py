@@ -11,7 +11,7 @@ import joblib
 import logging
 
 class ForecastModel:
-    def __init__(self, data_frame, column_name='ClosePrice', logger=None):
+    def __init__(self, data_frame, column_name='Close', logger=None):
         """
         Initialize the ForecastModel.
 
