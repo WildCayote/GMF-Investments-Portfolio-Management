@@ -30,12 +30,12 @@ class FinancialDataAnalyzer:
             try:
                 df['Pct_Change'] = df['Close'].pct_change() * 100
                 plt.figure(figsize=(10, 6))
-                plt.plot(df.index, df['Pct_Change'], label=f'{symbol} Daily Percentage Change', color='purple')
-                plt.title(f"{symbol} Daily Percentage Change Over Time", fontsize=16)
-                plt.xlabel("Date", fontsize=12)
-                plt.ylabel("Percentage Change (%)", fontsize=12)
+                plt.plot(df.index, df['Pct_Change'], label=f'{symbol} Daily Percentage Change', color='darkviolet')
+                plt.title(f"{symbol} Daily Percentage Change Over Time", fontsize=16, color='midnightblue')
+                plt.xlabel("Date", fontsize=12, color='midnightblue')
+                plt.ylabel("Percentage Change (%)", fontsize=12, color='midnightblue')
                 plt.legend()
-                plt.grid(True, color='gray', linestyle='--', linewidth=0.5)
+                plt.grid(True, color='lightgrey', linestyle='--', linewidth=0.5)
                 plt.show()
             except Exception as e:
                 print(f"Error plotting percentage change for {symbol}: {str(e)}")
@@ -65,13 +65,13 @@ class FinancialDataAnalyzer:
 
                 plt.figure(figsize=(12, 6))
                 
-                sns.lineplot(data=df, x=df.index, y='Close', label=f'{symbol} Closing Price', color="blue", linestyle='solid')
-                sns.lineplot(data=df, x=df.index, y='Rolling_Mean', label=f'{symbol} {window_size}-day Rolling Mean', color="magenta", linestyle="--")
-                sns.lineplot(data=df, x=df.index, y='Rolling_Std', label=f'{symbol} {window_size}-day Rolling Volatility', color="cyan", linestyle=":")
+                sns.lineplot(data=df, x=df.index, y='Close', label=f'{symbol} Closing Price', color="darkblue", linestyle='solid')
+                sns.lineplot(data=df, x=df.index, y='Rolling_Mean', label=f'{symbol} {window_size}-day Rolling Mean', color="hotpink", linestyle="--")
+                sns.lineplot(data=df, x=df.index, y='Rolling_Std', label=f'{symbol} {window_size}-day Rolling Volatility', color="limegreen", linestyle=":")
 
-                plt.title(f"Closing Price Trend, Rolling Mean and Volatility of {symbol} Over Time", fontsize=16)
-                plt.xlabel("Date", fontsize=12)
-                plt.ylabel("Value", fontsize=12)
+                plt.title(f"Closing Price Trend, Rolling Mean, and Volatility of {symbol} Over Time", fontsize=16, color='midnightblue')
+                plt.xlabel("Date", fontsize=12, color='midnightblue')
+                plt.ylabel("Value", fontsize=12, color='midnightblue')
                 plt.legend(title="Legend")
                 plt.grid(True, color='lightgrey', linestyle='--', linewidth=0.5)
 
@@ -108,14 +108,14 @@ class FinancialDataAnalyzer:
                                      (df['Daily_Return'] < mean_return - threshold * std_dev)]
 
                 plt.figure(figsize=(12, 6))
-                sns.lineplot(x=df.index, y=df['Daily_Return'], label=f'{symbol} Daily Return', color='green')
+                sns.lineplot(x=df.index, y=df['Daily_Return'], label=f'{symbol} Daily Return', color='darkgreen')
 
-                plt.scatter(unusual_returns.index, unusual_returns['Daily_Return'], color='red', 
+                plt.scatter(unusual_returns.index, unusual_returns['Daily_Return'], color='orangered', 
                             label=f"Unusual Returns (±{threshold}σ)", s=50, marker='o')
 
-                plt.title(f"Daily Returns with Unusual Days Highlighted - {symbol}", fontsize=16)
-                plt.xlabel("Date", fontsize=12)
-                plt.ylabel("Daily Return (%)", fontsize=12)
+                plt.title(f"Daily Returns with Unusual Days Highlighted - {symbol}", fontsize=16, color='midnightblue')
+                plt.xlabel("Date", fontsize=12, color='midnightblue')
+                plt.ylabel("Daily Return (%)", fontsize=12, color='midnightblue')
                 plt.axhline(0, color='black', linestyle='--')
                 plt.legend()
                 plt.grid(True, color='lightgrey', linestyle='--', linewidth=0.5)
