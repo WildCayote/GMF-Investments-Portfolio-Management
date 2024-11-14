@@ -212,3 +212,31 @@ class ForecastModel:
         except Exception as e:
             self.logger.error(f"Error saving {chosen_model} model: {e}")
             raise
+
+    def make_prediction(self):
+        """Generate predictions using all trained models."""
+        try:
+            self.predictions = {}  # Ensure self.predictions is initialized
+    
+            for model_name, model_data in self.models.items():
+                if model_name == 'AutoARIMA' or model_name == 'SARIMA':
+                    # Corrected: Use self.testing_set instead of self.test
+                    self.predictions[model_name] = model_data.predict(n_periods=len(self.testing_set))
+                elif model_name == 'LSTM':
+                    model = model_data['model']
+                    seq_length = model_data['seq_length']
+                    data = np.array(self.training_set[self.column_name].values[-seq_length:].reshape(-1, 1))
+                    lstm_predictions = []
+    
+                    for i in range(len(self.testing_set)):
+                        # Predict and reshape for next iteration
+                        pred = model.predict(data.reshape(1, seq_length, 1))
+                        lstm_predictions.append(pred[0, 0])
+                        data = np.append(data[1:], pred[0, 0]).reshape(-1, 1)
+                    
+                    self.predictions['LSTM'] = np.array(lstm_predictions)
+    
+            self.logger.info("Predictions generated for all models.")
+        except Exception as e:
+            self.logger.error(f"Error in making predictions: {e}")
+            raise ValueError("Prediction generation failed")
