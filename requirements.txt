@@ -9,3 +9,4 @@ pynance
 statsmodels
 tensorflow
 keras
+pmdarima
