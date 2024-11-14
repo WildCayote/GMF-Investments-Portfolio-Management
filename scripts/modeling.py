@@ -217,7 +217,7 @@ class ForecastModel:
         """Generate predictions using all trained models."""
         try:
             self.predictions = {}  # Ensure self.predictions is initialized
-    
+
             for model_name, model_data in self.models.items():
                 if model_name == 'AutoARIMA' or model_name == 'SARIMA':
                     # Corrected: Use self.testing_set instead of self.test
@@ -227,16 +227,39 @@ class ForecastModel:
                     seq_length = model_data['seq_length']
                     data = np.array(self.training_set[self.column_name].values[-seq_length:].reshape(-1, 1))
                     lstm_predictions = []
-    
+
                     for i in range(len(self.testing_set)):
                         # Predict and reshape for next iteration
                         pred = model.predict(data.reshape(1, seq_length, 1))
                         lstm_predictions.append(pred[0, 0])
                         data = np.append(data[1:], pred[0, 0]).reshape(-1, 1)
-                    
+
                     self.predictions['LSTM'] = np.array(lstm_predictions)
-    
+
             self.logger.info("Predictions generated for all models.")
         except Exception as e:
             self.logger.error(f"Error in making predictions: {e}")
             raise ValueError("Prediction generation failed")
+
+    def save_predictions(self, file_path):
+        """
+        Saves predictions from all trained models to a CSV file.
+
+        Parameters:
+        file_path (str): Path to save the CSV file.
+        """
+        try:
+            # Create a DataFrame with the actual values
+            predictions_df = pd.DataFrame(self.testing_set[self.column_name])
+            predictions_df.columns = ['Actual']
+            
+            # Add predictions from each model to the DataFrame
+            for model_name, prediction in self.predictions.items():
+                predictions_df[model_name] = prediction
+            
+            # Save DataFrame to CSV
+            predictions_df.to_csv(file_path, index_label='Date')
+            self.logger.info(f"Predictions saved to {file_path}")
+        except Exception as e:
+            self.logger.error(f"Error saving predictions to CSV: {e}")
+            raise ValueError("Failed to save predictions to CSV")
